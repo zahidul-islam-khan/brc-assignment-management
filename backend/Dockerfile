@@ -7,7 +7,7 @@ COPY ["src/BRC.Domain/BRC.Domain.csproj", "src/BRC.Domain/"]
 COPY ["src/BRC.Application/BRC.Application.csproj", "src/BRC.Application/"]
 COPY ["src/BRC.Infrastructure/BRC.Infrastructure.csproj", "src/BRC.Infrastructure/"]
 COPY ["src/BRC.API/BRC.API.csproj", "src/BRC.API/"]
-RUN dotnet restore
+RUN dotnet restore src/BRC.API/BRC.API.csproj
 
 # Copy the rest of the code and build
 COPY . .
