@@ -22,5 +22,6 @@ COPY --from=build /app/publish .
 # Expose port 8080 (standard for Render and cloud providers)
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
+ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
 
 ENTRYPOINT ["dotnet", "BRC.API.dll"]
