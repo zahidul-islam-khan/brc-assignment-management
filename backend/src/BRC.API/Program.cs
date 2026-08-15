@@ -2,6 +2,7 @@ using System.Text;
 using BRC.API.Middleware;
 using BRC.Application;
 using BRC.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
