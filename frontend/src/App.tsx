@@ -66,15 +66,12 @@ const NAV: Record<Role, { key: string; label: string; icon: ReactNode }[]> = {
     { key: "assignments", label: "My Assignments", icon: <Icon.assignment /> },
     { key: "create", label: "Create Assignment", icon: <Icon.plus /> },
     { key: "submissions", label: "Submissions", icon: <Icon.submission /> },
-    { key: "classes", label: "Classes", icon: <Icon.classes /> },
-    { key: "subjects", label: "Subjects", icon: <Icon.subject /> },
     { key: "profile", label: "Profile", icon: <Icon.profile /> },
   ],
   student: [
     { key: "dashboard", label: "Dashboard", icon: <Icon.dashboard /> },
     { key: "assignments", label: "Assignments", icon: <Icon.assignment /> },
     { key: "submissions", label: "My Submissions", icon: <Icon.submission /> },
-    { key: "classes", label: "Classes / Courses", icon: <Icon.classes /> },
     { key: "profile", label: "Profile", icon: <Icon.profile /> },
   ],
 }
@@ -2021,30 +2018,40 @@ function AppInner() {
   const render = () => {
     switch (route.view) {
       case "dashboard": return role === "admin" ? <AdminDashboard go={go} /> : role === "teacher" ? <TeacherDashboard go={go} /> : <StudentDashboard go={go} />
-      case "users": return <AdminUsers go={go} />
-      case "user-form": return <UserForm go={go} id={id} />
-      case "user-detail": return <UserDetail go={go} id={id} />
-      case "classes": return role === "teacher" ? <TeacherClasses go={go} /> : <AdminClasses go={go} />
-      case "class-detail": return <ClassDetail go={go} id={id} />
-      case "subjects": return role === "teacher" ? <TeacherSubjects /> : <AdminSubjects />
-      case "teacher-assign": return <TeacherAssign />
+      case "users": return role === "admin" ? <AdminUsers go={go} /> : null
+      case "user-form": return role === "admin" ? <UserForm go={go} id={id} /> : null
+      case "user-detail": return role === "admin" ? <UserDetail go={go} id={id} /> : null
+      case "classes": return role === "admin" ? <AdminClasses go={go} /> : null
+      case "class-detail": return role === "admin" ? <ClassDetail go={go} id={id} /> : null
+      case "subjects": return role === "admin" ? <AdminSubjects /> : null
+      case "teacher-assign": return role === "admin" ? <TeacherAssign /> : null
       case "assignments": return role === "student" ? <StudentAssignments go={go} /> : <AssignmentsList role={role} go={go} />
       case "assignment-detail": return role === "student" ? <StudentAssignmentDetail go={go} id={id} /> : <AssignmentDetail role={role} go={go} id={id} />
-      case "create": return <CreateAssignment go={go} id={id} />
+      case "create": return role !== "student" ? <CreateAssignment go={go} id={id} /> : null
       case "submissions": return role === "student" ? <StudentSubmissions go={go} /> : <SubmissionsList role={role} go={go} />
-      case "review": return <ReviewSubmission go={go} id={id} />
-      case "settings": return <AdminSettings />
+      case "review": return role !== "student" ? <ReviewSubmission go={go} id={id} /> : null
+      case "settings": return role === "admin" ? <AdminSettings /> : null
       case "notifications": return <NotificationsPage />
       case "profile": return <Profile role={role} user={currentUser} />
-      default: return <EmptyState title="Page not found" message="This page doesn't exist yet." action={<Button variant="primary" onClick={() => go("dashboard")}>Back to dashboard</Button>} />
+      default: return <EmptyState title="Page not found" message="This page doesn't exist or you don't have permission to view it." action={<Button variant="primary" onClick={() => go("dashboard")}>Back to dashboard</Button>} />
     }
+  }
+
+  // If a route returns null due to role restriction, fallback to default
+  const renderedRoute = render()
+  if (renderedRoute === null) {
+    return (
+      <Shell role={role} user={currentUser} route={route} go={go} onLogout={logout} title="Access Denied" crumbs={["Access Denied"]} showSearch={false}>
+        <EmptyState title="Access Denied" message="You don't have permission to view this page." action={<Button variant="primary" onClick={() => go("dashboard")}>Back to dashboard</Button>} />
+      </Shell>
+    )
   }
 
   const showSearch = ["users", "assignments", "submissions", "subjects"].includes(route.view)
 
   return (
     <Shell role={role} user={currentUser} route={route} go={go} onLogout={logout} title={title} crumbs={crumbs} showSearch={showSearch}>
-      {render()}
+      {renderedRoute}
     </Shell>
   )
 }
