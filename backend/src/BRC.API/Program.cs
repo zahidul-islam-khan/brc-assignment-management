@@ -98,9 +98,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Seed Database on startup if needed
+// Apply migrations and seed database on startup
 using (var scope = app.Services.CreateScope())
 {
+    var db = scope.ServiceProvider.GetRequiredService<BRC.Infrastructure.Data.BrcDbContext>();
+    await db.Database.MigrateAsync();
+
     var seeder = scope.ServiceProvider.GetRequiredService<BRC.Infrastructure.Data.Seed.DataSeeder>();
     await seeder.SeedAsync();
 }
