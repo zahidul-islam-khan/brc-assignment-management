@@ -1,0 +1,332 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\tests\\BRC.UnitTests\\BRC.UnitTests.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Application\\BRC.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Application\\BRC.Application.csproj",
+        "projectName": "BRC.Application",
+        "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Application\\BRC.Application.csproj",
+        "packagesPath": "C:\\Users\\wwwze\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\wwwze\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj": {
+                "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj"
+              },
+              "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Infrastructure\\BRC.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Infrastructure\\BRC.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.*, )"
+            },
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.*, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.*, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.*, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.423/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj",
+        "projectName": "BRC.Domain",
+        "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj",
+        "packagesPath": "C:\\Users\\wwwze\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\wwwze\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.423/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Infrastructure\\BRC.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Infrastructure\\BRC.Infrastructure.csproj",
+        "projectName": "BRC.Infrastructure",
+        "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Infrastructure\\BRC.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\wwwze\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\wwwze\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj": {
+                "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.*, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.423/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\tests\\BRC.UnitTests\\BRC.UnitTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\tests\\BRC.UnitTests\\BRC.UnitTests.csproj",
+        "projectName": "BRC.UnitTests",
+        "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\tests\\BRC.UnitTests\\BRC.UnitTests.csproj",
+        "packagesPath": "C:\\Users\\wwwze\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\tests\\BRC.UnitTests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\wwwze\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Application\\BRC.Application.csproj": {
+                "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Application\\BRC.Application.csproj"
+              },
+              "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj": {
+                "projectPath": "C:\\Users\\wwwze\\OneDrive\\Documents\\Assignment Management System UI\\backend\\src\\BRC.Domain\\BRC.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.8.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.72, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.423/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

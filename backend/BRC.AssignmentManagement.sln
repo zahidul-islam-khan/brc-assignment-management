@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B671181F-25A6-4138-99D4-3BC90D9D3129}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRC.Domain", "src\BRC.Domain\BRC.Domain.csproj", "{25F19F87-22CB-4912-B1BA-61E25173FA35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRC.Application", "src\BRC.Application\BRC.Application.csproj", "{575D45F7-7EA9-4A39-9491-DA12F8F2A764}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRC.Infrastructure", "src\BRC.Infrastructure\BRC.Infrastructure.csproj", "{2CE24631-1395-4CEF-8C6C-2328270B585D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRC.API", "src\BRC.API\BRC.API.csproj", "{470DD07F-D1A5-4A56-80F5-1E150A4E9699}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{75F853B3-6258-4F58-A6DA-37B94D0CB5DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRC.UnitTests", "tests\BRC.UnitTests\BRC.UnitTests.csproj", "{F538F9CE-59FE-4E73-9C16-EF967DA6EC2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRC.IntegrationTests", "tests\BRC.IntegrationTests\BRC.IntegrationTests.csproj", "{8D850C79-36D4-4C24-A8EC-ABF6AE82FEAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25F19F87-22CB-4912-B1BA-61E25173FA35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25F19F87-22CB-4912-B1BA-61E25173FA35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25F19F87-22CB-4912-B1BA-61E25173FA35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25F19F87-22CB-4912-B1BA-61E25173FA35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{575D45F7-7EA9-4A39-9491-DA12F8F2A764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{575D45F7-7EA9-4A39-9491-DA12F8F2A764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{575D45F7-7EA9-4A39-9491-DA12F8F2A764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{575D45F7-7EA9-4A39-9491-DA12F8F2A764}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CE24631-1395-4CEF-8C6C-2328270B585D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CE24631-1395-4CEF-8C6C-2328270B585D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CE24631-1395-4CEF-8C6C-2328270B585D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CE24631-1395-4CEF-8C6C-2328270B585D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{470DD07F-D1A5-4A56-80F5-1E150A4E9699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{470DD07F-D1A5-4A56-80F5-1E150A4E9699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{470DD07F-D1A5-4A56-80F5-1E150A4E9699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{470DD07F-D1A5-4A56-80F5-1E150A4E9699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F538F9CE-59FE-4E73-9C16-EF967DA6EC2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F538F9CE-59FE-4E73-9C16-EF967DA6EC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F538F9CE-59FE-4E73-9C16-EF967DA6EC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F538F9CE-59FE-4E73-9C16-EF967DA6EC2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D850C79-36D4-4C24-A8EC-ABF6AE82FEAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D850C79-36D4-4C24-A8EC-ABF6AE82FEAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D850C79-36D4-4C24-A8EC-ABF6AE82FEAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D850C79-36D4-4C24-A8EC-ABF6AE82FEAF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{25F19F87-22CB-4912-B1BA-61E25173FA35} = {B671181F-25A6-4138-99D4-3BC90D9D3129}
+		{575D45F7-7EA9-4A39-9491-DA12F8F2A764} = {B671181F-25A6-4138-99D4-3BC90D9D3129}
+		{2CE24631-1395-4CEF-8C6C-2328270B585D} = {B671181F-25A6-4138-99D4-3BC90D9D3129}
+		{470DD07F-D1A5-4A56-80F5-1E150A4E9699} = {B671181F-25A6-4138-99D4-3BC90D9D3129}
+		{F538F9CE-59FE-4E73-9C16-EF967DA6EC2C} = {75F853B3-6258-4F58-A6DA-37B94D0CB5DD}
+		{8D850C79-36D4-4C24-A8EC-ABF6AE82FEAF} = {75F853B3-6258-4F58-A6DA-37B94D0CB5DD}
+	EndGlobalSection
+EndGlobal
