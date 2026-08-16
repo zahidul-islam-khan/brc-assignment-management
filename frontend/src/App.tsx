@@ -1541,7 +1541,7 @@ function StudentAssignments({ go }: { go: (v: string, params?: Record<string, st
   const [apiAssignments, setApiAssignments] = useState<any[]>([])
 
   useEffect(() => {
-    api.get<any>("/assignments?pageSize=100").then(res => setApiAssignments(res.items || []))
+    api.get<any>("/assignments/student?pageSize=100").then(res => setApiAssignments(res.items || []))
   }, [])
 
   const filtered = apiAssignments.filter((a: any) => 
@@ -1706,8 +1706,14 @@ function StudentAssignmentDetail({ go, id }: { go: (v: string, params?: Record<s
 }
 
 function StudentSubmissions({ go }: { go: (v: string, params?: Record<string, string>) => void }) {
-  const rows = studentAssignments.filter((a) => a.subStatus !== "Not Submitted" && (a.subStatus as string) !== "Overdue")
   const [q, setQ] = useState("")
+  const [apiAssignments, setApiAssignments] = useState<any[]>([])
+
+  useEffect(() => {
+    api.get<any>("/assignments/student?pageSize=100").then(res => setApiAssignments(res.items || []))
+  }, [])
+
+  const rows = apiAssignments.filter((a) => a.subStatus !== "Not Submitted" && (a.subStatus as string) !== "Overdue")
   const filtered = rows.filter((r) => r.title.toLowerCase().includes(q.toLowerCase()))
   return (
     <>
@@ -1719,9 +1725,9 @@ function StudentSubmissions({ go }: { go: (v: string, params?: Record<string, st
             {filtered.map((r) => (
               <Tr key={r.id}>
                 <Td className="font-medium text-ink">{r.title}</Td>
-                <Td>{r.subject}</Td>
+                <Td>{r.subjectName}</Td>
                 <Td><StatusBadge status={r.subStatus as string} /></Td>
-                <Td>{r.myMarks !== null ? <span className="font-mono">{r.myMarks}/{r.marks}</span> : "—"}</Td>
+                <Td>{r.myMarks !== null ? <span className="font-mono">{r.myMarks}/{r.totalMarks}</span> : "—"}</Td>
                 <Td className="text-right"><Button size="sm" variant="secondary" onClick={() => go("assignment-detail", { id: r.id })}>View</Button></Td>
               </Tr>
             ))}
