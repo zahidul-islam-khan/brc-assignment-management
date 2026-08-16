@@ -451,6 +451,12 @@ function TeacherDashboard({ go }: { go: (v: string) => void }) {
 }
 
 function StudentDashboard({ go }: { go: (v: string, params?: Record<string, string>) => void }) {
+  const [apiAssignments, setApiAssignments] = useState<any[]>([])
+
+  useEffect(() => {
+    api.get<any>("/assignments/student?pageSize=4").then(res => setApiAssignments(res.items || []))
+  }, [])
+
   return (
     <>
       <PageHead title="Dashboard" subtitle={`${greeting()}, Fahim Rahman — stay on top of your assignments.`} />
@@ -496,12 +502,12 @@ function StudentDashboard({ go }: { go: (v: string, params?: Record<string, stri
         <Card pad={false}>
           <div className="p-5 pb-3"><SectionTitle action={<Button size="sm" variant="ghost" onClick={() => go("assignments")}>View all</Button>}>Recent Assignments</SectionTitle></div>
           <Table head={<><Th>Assignment</Th><Th>Subject</Th><Th>Deadline</Th><Th>Status</Th></>}>
-            {studentAssignments.slice(0, 4).map((a) => (
+            {apiAssignments.slice(0, 4).map((a) => (
               <Tr key={a.id} onClick={() => go("assignment-detail", { id: a.id })}>
                 <Td className="font-medium text-ink">{a.title}</Td>
-                <Td>{a.subject}</Td>
-                <Td className="whitespace-nowrap text-xs">{a.deadline}</Td>
-                <Td><StatusBadge status={a.subStatus as string} /></Td>
+                <Td>{a.subjectName}</Td>
+                <Td className="whitespace-nowrap text-xs">{new Date(a.deadline).toLocaleDateString()}</Td>
+                <Td><StatusBadge status={a.submissionStatus as string} /></Td>
               </Tr>
             ))}
           </Table>
@@ -1122,8 +1128,8 @@ function AssignmentsList({ role, go }: { role: Role; go: (v: string, params?: Re
                   <Td><div className="font-medium text-ink">{a.title}</div><div className="text-xs text-muted">{a.subjectName}</div></Td>
                   <Td>{a.className}</Td>
                   {role === "admin" && <Td>{a.teacherName}</Td>}
-                  <Td className="whitespace-nowrap text-xs">{new Date(a.dueDate).toLocaleDateString()}</Td>
-                  <Td>{a.totalMarks}</Td>
+                  <Td className="whitespace-nowrap text-xs">{new Date(a.deadline).toLocaleDateString()}</Td>
+                  <Td>{a.maximumMarks}</Td>
                   <Td><span className="font-mono text-[13px]">{a.submissionCount || 0}/{a.totalStudents || 0}</span></Td>
                   <Td><StatusBadge status={a.status} /></Td>
                   <Td className="text-right">
@@ -1186,8 +1192,8 @@ function CreateAssignment({ go, id }: { go: (v: string) => void; id?: string }) 
         description,
         classId,
         subjectId,
-        dueDate: new Date(dueDate).toISOString(),
-        totalMarks: marks,
+        deadline: new Date(dueDate).toISOString(),
+        maximumMarks: marks,
         status: publish ? "Published" : "Draft",
         submissionPolicy: "No late submissions" // Default
       }
@@ -1281,19 +1287,29 @@ function FileDrop({ hint, onFile }: { hint: string; onFile?: (file: File | null)
 
 /* ================================================================ assignment detail */
 function AssignmentDetail({ role, go, id }: { role: Role; go: (v: string, params?: Record<string, string>) => void; id?: string }) {
-  const a = allAssignments.find((x) => x.id === id) ?? allAssignments[0]
+  const [a, setA] = useState<any>(null)
+  const [subs, setSubs] = useState<any[]>([])
   const [tab, setTab] = useState("Overview")
-  const subs = allSubmissions.filter((s) => s.assignment === a.title)
+
+  useEffect(() => {
+    if (id) {
+      api.get<any>(`/assignments/${id}`).then(res => setA(res))
+      api.get<any>(`/submissions?assignmentId=${id}&pageSize=100`).then(res => setSubs(res.items || []))
+    }
+  }, [id])
+
+  if (!a) return null;
+
   const backKey = role === "admin" ? "assignments" : "assignments"
   return (
     <>
       <BackLink onClick={() => go(backKey)}>Back to Assignments</BackLink>
-      <PageHead title={a.title} subtitle={`${a.subject} · ${a.klass}`}
+      <PageHead title={a.title} subtitle={`${a.subjectName} · ${a.className}`}
         action={<div className="flex gap-2"><StatusBadge status={a.status} />{role === "teacher" && <Button variant="secondary" icon={<Icon.edit className="h-4 w-4" />} onClick={() => go("create", { id: a.id })}>Edit</Button>}</div>} />
       <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <MetaCard label="Deadline" value={a.deadline} />
-        <MetaCard label="Maximum marks" value={String(a.marks)} />
-        <MetaCard label="Submitted" value={`${a.submissions}/${a.total}`} />
+        <MetaCard label="Deadline" value={new Date(a.deadline).toLocaleDateString()} />
+        <MetaCard label="Maximum marks" value={String(a.maximumMarks)} />
+        <MetaCard label="Submitted" value={`${a.submissionCount || 0}/${a.totalStudents || 0}`} />
         <MetaCard label="Status" value={a.status} />
       </div>
       <Card pad={false}>
@@ -1301,17 +1317,19 @@ function AssignmentDetail({ role, go, id }: { role: Role; go: (v: string, params
         <div className="p-5">
           {tab === "Overview" && (
             <div className="space-y-5">
-              <div><h3 className="mb-1 font-display text-sm font-bold text-ink">Description</h3><p className="text-sm leading-relaxed text-ink-soft">{a.description}</p></div>
+              <div><h3 className="mb-1 font-display text-sm font-bold text-ink">Description</h3><p className="text-sm leading-relaxed text-ink-soft whitespace-pre-wrap">{a.description}</p></div>
               <div><h3 className="mb-2 font-display text-sm font-bold text-ink">Attachment</h3>
-                <div className="flex items-center gap-3 rounded-lg border border-line p-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-danger-bg text-danger"><Icon.file className="h-5 w-5" /></div>
-                  <div className="flex-1"><div className="text-sm font-medium text-ink">assignment-brief.pdf</div><div className="text-xs text-muted">240 KB</div></div>
-                  <IconButton label="Download"><Icon.download className="h-5 w-5" /></IconButton>
-                </div>
+                {a.attachments?.length > 0 ? a.attachments.map((att: any) => (
+                  <div key={att.id} className="flex items-center gap-3 rounded-lg border border-line p-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-info-bg text-info"><Icon.file className="h-5 w-5" /></div>
+                    <div className="flex-1"><div className="text-sm font-medium text-ink">{att.fileName}</div><div className="text-xs text-muted">{(att.fileSize / 1024).toFixed(0)} KB</div></div>
+                    <IconButton label="Download"><Icon.download className="h-5 w-5" /></IconButton>
+                  </div>
+                )) : <div className="text-sm text-muted">No attachments.</div>}
               </div>
               <div className="grid gap-4 border-t border-line pt-4 sm:grid-cols-2">
                 <MetaRow label="Submission policy" value="No late submissions" />
-                <MetaRow label="Created" value="05 Aug 2026" />
+                <MetaRow label="Created" value={new Date(a.createdAt).toLocaleDateString()} />
               </div>
             </div>
           )}
@@ -1319,10 +1337,10 @@ function AssignmentDetail({ role, go, id }: { role: Role; go: (v: string, params
             <Table head={<><Th>Student</Th><Th>Submitted</Th><Th>Status</Th><Th>Marks</Th><Th className="text-right">Action</Th></>}>
               {subs.map((s) => (
                 <Tr key={s.id}>
-                  <Td><div className="flex items-center gap-2.5"><Avatar name={s.student} size={30} />{s.student}</div></Td>
-                  <Td className="whitespace-nowrap text-xs">{s.submittedAt}</Td>
+                  <Td><div className="flex items-center gap-2.5"><Avatar name={s.studentName} size={30} />{s.studentName}</div></Td>
+                  <Td className="whitespace-nowrap text-xs">{s.submittedAt ? new Date(s.submittedAt).toLocaleDateString() : "—"}</Td>
                   <Td><StatusBadge status={s.status} /></Td>
-                  <Td>{s.marks !== null ? <span className="font-mono">{s.marks}/{a.marks}</span> : "—"}</Td>
+                  <Td>{s.marks !== null && s.marks !== undefined ? <span className="font-mono">{s.marks}/{a.maximumMarks}</span> : "—"}</Td>
                   <Td className="text-right"><Button size="sm" variant="secondary" onClick={() => go("review", { id: s.id })}>Review</Button></Td>
                 </Tr>
               ))}
@@ -1330,13 +1348,13 @@ function AssignmentDetail({ role, go, id }: { role: Role; go: (v: string, params
           ) : <EmptyState icon={<Icon.submission />} title="No submissions yet" message="Students haven't submitted this assignment yet." />)}
           {tab === "Statistics" && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <StatCard label="Total students" value={a.total} icon={<Icon.users />} tone="neutral" />
-              <StatCard label="Submitted" value={a.submissions} icon={<Icon.submission />} tone="info" />
-              <StatCard label="Not submitted" value={a.total - a.submissions} icon={<Icon.clock />} tone="warn" />
-              <StatCard label="Average marks" value="16.4" icon={<Icon.award />} tone="ok" />
+              <StatCard label="Total students" value={a.totalStudents || 0} icon={<Icon.users />} tone="neutral" />
+              <StatCard label="Submitted" value={a.submissionCount || 0} icon={<Icon.submission />} tone="info" />
+              <StatCard label="Not submitted" value={(a.totalStudents || 0) - (a.submissionCount || 0)} icon={<Icon.clock />} tone="warn" />
+              <StatCard label="Average marks" value="—" icon={<Icon.award />} tone="ok" />
               <div className="sm:col-span-2 lg:col-span-4">
-                <div className="mb-1 flex justify-between text-xs text-muted"><span>Submission progress</span><span>{Math.round((a.submissions / a.total) * 100)}%</span></div>
-                <div className="h-2.5 overflow-hidden rounded-full bg-line-soft"><div className="h-full rounded-full bg-brand" style={{ width: `${(a.submissions / a.total) * 100}%` }} /></div>
+                <div className="mb-1 flex justify-between text-xs text-muted"><span>Submission progress</span><span>{a.totalStudents ? Math.round(((a.submissionCount || 0) / a.totalStudents) * 100) : 0}%</span></div>
+                <div className="h-2.5 overflow-hidden rounded-full bg-line-soft"><div className="h-full rounded-full bg-brand" style={{ width: `${a.totalStudents ? ((a.submissionCount || 0) / a.totalStudents) * 100 : 0}%` }} /></div>
               </div>
             </div>
           )}
@@ -1545,7 +1563,7 @@ function StudentAssignments({ go }: { go: (v: string, params?: Record<string, st
   }, [])
 
   const filtered = apiAssignments.filter((a: any) => 
-    (status === "all" || (a.status || "Not Submitted") === status) && 
+    (status === "all" || (a.submissionStatus || "Not Submitted") === status) && 
     a.title.toLowerCase().includes(q.toLowerCase())
   )
   return (
@@ -1562,12 +1580,12 @@ function StudentAssignments({ go }: { go: (v: string, params?: Record<string, st
               <div onClick={() => go("assignment-detail", { id: a.id })} className="flex flex-1 flex-col">
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="font-display text-base font-bold leading-snug text-ink">{a.title}</h3>
-                  <StatusBadge status={a.subStatus as string} />
+                  <StatusBadge status={a.submissionStatus as string} />
                 </div>
                 <p className="mt-1 text-sm text-muted">{a.subjectName} · {a.teacherName}</p>
                 <div className="mt-4 flex items-center justify-between border-t border-line pt-3 text-sm">
-                  <span className="flex items-center gap-1.5 text-muted"><Icon.clock className="h-4 w-4" />{new Date(a.dueDate).toLocaleDateString()}</span>
-                  <span className="font-medium text-ink">{a.totalMarks} marks</span>
+                  <span className="flex items-center gap-1.5 text-muted"><Icon.clock className="h-4 w-4" />{new Date(a.deadline).toLocaleDateString()}</span>
+                  <span className="font-medium text-ink">{a.maximumMarks} marks</span>
                 </div>
               </div>
             </Card>
@@ -1659,7 +1677,7 @@ function StudentAssignmentDetail({ go, id }: { go: (v: string, params?: Record<s
             <div className="grid grid-cols-2 gap-3 border-b border-line pb-4 sm:grid-cols-3">
               <div><div className="text-xs text-muted">Subject</div><div className="text-sm font-medium text-ink">{a.subjectName}</div></div>
               <div><div className="text-xs text-muted">Teacher</div><div className="text-sm font-medium text-ink">{a.teacherName}</div></div>
-              <div><div className="text-xs text-muted">Maximum marks</div><div className="text-sm font-medium text-ink">{a.totalMarks}</div></div>
+              <div><div className="text-xs text-muted">Maximum marks</div><div className="text-sm font-medium text-ink">{a.maximumMarks}</div></div>
             </div>
             <div className="pt-4">
               <h3 className="mb-1 font-display text-sm font-bold text-ink">Instructions</h3>
@@ -1670,7 +1688,7 @@ function StudentAssignmentDetail({ go, id }: { go: (v: string, params?: Record<s
           {subStatus === "Graded" ? (
             <Card className="border-ok/30">
               <SectionTitle>Your Result</SectionTitle>
-              <div className="flex items-center gap-4"><div className="rounded-xl bg-ok-bg px-5 py-3 text-center"><div className="font-display text-2xl font-extrabold text-ok">{sub?.marks ?? 0}<span className="text-base text-muted">/{a.totalMarks}</span></div></div>
+              <div className="flex items-center gap-4"><div className="rounded-xl bg-ok-bg px-5 py-3 text-center"><div className="font-display text-2xl font-extrabold text-ok">{sub?.marks ?? 0}<span className="text-base text-muted">/{a.maximumMarks}</span></div></div>
                 <p className="flex-1 text-sm leading-relaxed text-ink-soft">"{sub?.teacherFeedback || "No feedback provided."}" <span className="mt-1 block text-xs text-faint">— {a.teacherName}</span></p>
               </div>
             </Card>
@@ -1695,7 +1713,7 @@ function StudentAssignmentDetail({ go, id }: { go: (v: string, params?: Record<s
         <div>
           <Card className={subStatus !== "Graded" && !submitted ? "border-warn/40 bg-warn-bg/30" : ""}>
             <div className="text-xs font-medium uppercase tracking-wide text-faint">Deadline</div>
-            <div className="mt-1 flex items-center gap-2 font-display text-base font-bold text-ink"><Icon.clock className="h-5 w-5 text-warn" />{new Date(a.dueDate).toLocaleDateString()}</div>
+            <div className="mt-1 flex items-center gap-2 font-display text-base font-bold text-ink"><Icon.clock className="h-5 w-5 text-warn" />{new Date(a.deadline).toLocaleDateString()}</div>
             <p className="mt-3 text-sm text-muted">Submit before the deadline to avoid a late penalty. Class {a.className}.</p>
           </Card>
         </div>
