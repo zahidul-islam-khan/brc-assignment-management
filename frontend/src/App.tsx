@@ -1603,20 +1603,33 @@ function StudentAssignmentDetail({ go, id }: { go: (v: string, params?: Record<s
   const [answer, setAnswer] = useState("")
   const [file, setFile] = useState<File | null>(null)
   const [confirm, setConfirm] = useState(false)
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (id) {
-      api.get<any>(`/assignments/${id}`).then(res => setA(res))
-      api.get<any>(`/submissions?assignmentId=${id}`).then(res => {
-        if (res.items?.length > 0) {
-          const s = res.items[0]
-          setSub(s)
-          setAnswer(s.textAnswer || "")
-        }
-      })
+      setLoading(true)
+      api.get<any>(`/assignments/${id}`)
+        .then(res => {
+           setA(res)
+           return api.get<any>(`/submissions?assignmentId=${id}`)
+        })
+        .then(res => {
+          if (res?.items?.length > 0) {
+            const s = res.items[0]
+            setSub(s)
+            setAnswer(s.textAnswer || "")
+          }
+        })
+        .catch(e => {
+          setError(e.data?.message || e.message || "Failed to load assignment details.")
+        })
+        .finally(() => setLoading(false))
+    } else {
+      setError("No assignment ID provided.")
+      setLoading(false)
     }
   }, [id])
-
   const handleSaveDraft = async () => {
     try {
       let submissionId = sub?.id;
@@ -1662,6 +1675,8 @@ function StudentAssignmentDetail({ go, id }: { go: (v: string, params?: Record<s
     setConfirm(false)
   }
 
+  if (loading) return <div className="flex h-64 items-center justify-center text-muted">Loading assignment...</div>;
+  if (error) return <Card><EmptyState title="Error" message={error} action={<Button variant="primary" onClick={() => go("assignments")}>Back to assignments</Button>} /></Card>;
   if (!a) return null;
 
   const subStatus = sub?.status || "Not Submitted"
