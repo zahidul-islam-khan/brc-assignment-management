@@ -1962,10 +1962,6 @@ function Login({ onLogin }: { onLogin: (r: Role, user: any) => void }) {
             </div>
             <Button type="submit" variant="primary" full disabled={loading}>{loading ? "Signing in…" : "Sign in"}</Button>
           </form>
-
-          <div className="mt-5 rounded-lg border border-dashed border-line bg-surface p-3 text-xs text-muted">
-            <span className="font-medium text-ink-soft">Demo:</span> pick a role above — credentials are pre-filled. Any password works.
-          </div>
         </div>
       </div>
     </div>
