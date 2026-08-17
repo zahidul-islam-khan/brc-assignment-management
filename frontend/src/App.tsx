@@ -265,7 +265,7 @@ function PageHead({ title, subtitle, action }: { title: string; subtitle?: strin
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="font-display text-2xl font-extrabold tracking-tight text-ink">{title}</h1>
+        <h1 className="font-display text-xl sm:text-2xl font-extrabold tracking-tight text-ink">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
       </div>
       {action}
@@ -339,9 +339,9 @@ function AdminDashboard({ go }: { go: (v: string) => void }) {
     <>
       <PageHead title="Dashboard" subtitle={`${greeting()}, Tanvir Ahmed — here's what's happening across EduSubmit today.`} />
       {loading ? (
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">{Array.from({ length: 6 }).map((_, i) => <Card key={i}><Skeleton className="h-11 w-11 rounded-xl" /><Skeleton className="mt-4 h-6 w-16" /><Skeleton className="mt-2 h-3 w-24" /></Card>)}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-3">{Array.from({ length: 6 }).map((_, i) => <Card key={i}><Skeleton className="h-11 w-11 rounded-xl" /><Skeleton className="mt-4 h-6 w-16" /><Skeleton className="mt-2 h-3 w-24" /></Card>)}</div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-3">
           <StatCard label="Students" value={248} icon={<Icon.users />} tone="info" />
           <StatCard label="Teachers" value={32} icon={<Icon.award />} tone="info" />
           <StatCard label="Classes" value={14} icon={<Icon.classes />} tone="neutral" />
@@ -401,7 +401,7 @@ function TeacherDashboard({ go }: { go: (v: string) => void }) {
     <>
       <PageHead title="Dashboard" subtitle={`${greeting()}, Nusrat Jahan — you have submissions waiting for review.`}
         action={<Button variant="primary" icon={<Icon.plus className="h-4 w-4" />} onClick={() => go("create")}>Create Assignment</Button>} />
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard label="Assignments" value={12} icon={<Icon.assignment />} tone="info" />
         <StatCard label="Published" value={8} icon={<Icon.checkCircle />} tone="ok" />
         <StatCard label="Pending Reviews" value={24} icon={<Icon.clock />} tone="warn" />
@@ -460,7 +460,7 @@ function StudentDashboard({ go }: { go: (v: string, params?: Record<string, stri
   return (
     <>
       <PageHead title="Dashboard" subtitle={`${greeting()}, Fahim Rahman — stay on top of your assignments.`} />
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard label="Total Assignments" value={8} icon={<Icon.assignment />} tone="info" />
         <StatCard label="Pending" value={3} icon={<Icon.clock />} tone="warn" />
         <StatCard label="Submitted" value={4} icon={<Icon.submission />} tone="neutral" />
@@ -915,7 +915,7 @@ function AdminSubjects() {
   const [modal, setModal] = useState(false)
   const [q, setQ] = useState("")
   const [klass, setKlass] = useState("all")
-  const filtered = subjects.filter((s) => (klass === "all" || s.klass === klass) && s.name.toLowerCase().includes(q.toLowerCase()))
+  const filtered = useMemo(() => subjects.filter((s) => (klass === "all" || s.klass === klass) && s.name.toLowerCase().includes(q.toLowerCase())), [subjects, klass, q])
   return (
     <>
       <PageHead title="Subjects" subtitle="Courses offered across all classes."
@@ -1088,11 +1088,11 @@ function AssignmentsList({ role, go }: { role: Role; go: (v: string, params?: Re
     fetchAssignments()
   }, [])
 
-  const filtered = apiAssignments.filter((a: any) => 
+  const filtered = useMemo(() => apiAssignments.filter((a: any) => 
     (status === "all" || a.status === status) && 
     (klass === "all" || a.className === klass) && 
     a.title.toLowerCase().includes(q.toLowerCase())
-  )
+  ), [apiAssignments, status, klass, q])
   
   const { page, pages, setPage, slice, total } = usePaged(filtered)
   
@@ -1276,12 +1276,12 @@ function FileDrop({ hint, onFile }: { hint: string; onFile?: (file: File | null)
       <IconButton label="Remove file" onClick={handleRemove}><Icon.trash className="h-4 w-4" /></IconButton>
     </div>
   ) : (
-    <button onClick={() => inputRef.current?.click()} className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-line py-8 text-center transition-colors hover:border-brand-600/50 hover:bg-brand-50/40">
+    <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-line py-8 text-center transition-colors hover:border-brand-600/50 hover:bg-brand-50/40">
       <input type="file" className="hidden" ref={inputRef} onChange={handleFileChange} />
       <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand"><Icon.upload /></div>
       <div className="text-sm font-medium text-ink-soft">Drag &amp; drop a file, or <span className="text-brand">browse</span></div>
       <div className="text-xs text-faint">{hint}</div>
-    </button>
+    </label>
   )
 }
 
@@ -1380,10 +1380,10 @@ function SubmissionsList({ role, go }: { role: Role; go: (v: string, params?: Re
     api.get<any>("/submissions?pageSize=100").then(res => setApiSubmissions(res.items || []))
   }, [])
   
-  const filtered = apiSubmissions.filter((s: any) => 
+  const filtered = useMemo(() => apiSubmissions.filter((s: any) => 
     (status === "all" || s.status === status) && 
     s.studentName.toLowerCase().includes(q.toLowerCase())
-  )
+  ), [apiSubmissions, status, q])
   const { page, pages, setPage, slice, total } = usePaged(filtered)
   return (
     <>
@@ -1562,10 +1562,10 @@ function StudentAssignments({ go }: { go: (v: string, params?: Record<string, st
     api.get<any>("/assignments/student?pageSize=100").then(res => setApiAssignments(res.items || []))
   }, [])
 
-  const filtered = apiAssignments.filter((a: any) => 
+  const filtered = useMemo(() => apiAssignments.filter((a: any) => 
     (status === "all" || (a.submissionStatus || "Not Submitted") === status) && 
     a.title.toLowerCase().includes(q.toLowerCase())
-  )
+  ), [apiAssignments, status, q])
   return (
     <>
       <PageHead title="Assignments" subtitle="All assignments for XI Science A." />
@@ -1689,7 +1689,7 @@ function StudentAssignmentDetail({ go, id }: { go: (v: string, params?: Record<s
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Card>
-            <div className="grid grid-cols-2 gap-3 border-b border-line pb-4 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 border-b border-line pb-4 sm:grid-cols-3">
               <div><div className="text-xs text-muted">Subject</div><div className="text-sm font-medium text-ink">{a.subjectName}</div></div>
               <div><div className="text-xs text-muted">Teacher</div><div className="text-sm font-medium text-ink">{a.teacherName}</div></div>
               <div><div className="text-xs text-muted">Maximum marks</div><div className="text-sm font-medium text-ink">{a.maximumMarks}</div></div>
@@ -1746,8 +1746,8 @@ function StudentSubmissions({ go }: { go: (v: string, params?: Record<string, st
     api.get<any>("/assignments/student?pageSize=100").then(res => setApiAssignments(res.items || []))
   }, [])
 
-  const rows = apiAssignments.filter((a) => a.subStatus !== "Not Submitted" && (a.subStatus as string) !== "Overdue")
-  const filtered = rows.filter((r) => r.title.toLowerCase().includes(q.toLowerCase()))
+  const rows = useMemo(() => apiAssignments.filter((a) => a.subStatus !== "Not Submitted" && (a.subStatus as string) !== "Overdue"), [apiAssignments])
+  const filtered = useMemo(() => rows.filter((r) => r.title.toLowerCase().includes(q.toLowerCase())), [rows, q])
   return (
     <>
       <PageHead title="My Submissions" subtitle="Your submission history and results." />
