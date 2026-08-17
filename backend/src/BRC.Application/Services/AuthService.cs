@@ -45,6 +45,13 @@ public class AuthService : IAuthService
             return null;
         }
 
+        // Opportunistic Password Rehashing: Upgrade old slow hashes to the new fast work factor (8)
+        if (!user.PasswordHash.Contains("$08$"))
+        {
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password, 8);
+            _logger.LogInformation("Upgraded password hash work factor for user {Email}", user.Email);
+        }
+
         if (user.Status != UserStatus.Active)
         {
             _logger.LogWarning("Login failed: user {Email} is {Status}", request.Email, user.Status);
