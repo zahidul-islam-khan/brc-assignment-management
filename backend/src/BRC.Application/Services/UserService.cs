@@ -84,7 +84,7 @@ public class UserService : IUserService
             FirstName = dto.FirstName.Trim(),
             LastName = dto.LastName.Trim(),
             Email = dto.Email.ToLower().Trim(),
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password, 8),
             Phone = dto.Phone,
             Role = role,
             CreatedAt = DateTime.UtcNow
@@ -155,7 +155,7 @@ public class UserService : IUserService
         user.UpdatedAt = DateTime.UtcNow;
 
         if (!string.IsNullOrWhiteSpace(dto.Password))
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password, 8);
 
         if (user.Student != null)
         {

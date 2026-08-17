@@ -96,7 +96,7 @@ public class DataSeeder
         _context.SubjectAcademicGroups.AddRange(sagList);
 
         // ─── Users ───────────────────────────────────────
-        var passwordHash = BCrypt.Net.BCrypt.HashPassword("Password@123");
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword("Password@123", 8);
 
         // Admin
         var adminUser = new User
